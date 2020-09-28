@@ -1,0 +1,32 @@
+cabal-version:       2.2
+name:                hweekly
+version:             0.1.0.0
+-- synopsis:
+-- description:
+homepage:            https://github.com/rberenguel/hweekly#readme
+license:             BSD-3-Clause
+license-file:        LICENSE
+author:              Ruben Berenguel
+copyright:           2020 Ruben Berenguel
+category:            Misc
+build-type:          Simple
+extra-source-files:  README.md
+
+common deps
+  build-depends:       base >= 4.7 && < 5, text, 
+                       bytestring, raw-strings-qq, 
+                       yaml, mtl, sqlite-simple, 
+                       temporary, directory, typed-process
+  default-language:    Haskell2010
+  other-modules:       Additional
+  ghc-options:         -fwarn-incomplete-patterns 
+                       -fwarn-unused-imports 
+                       -Werror=incomplete-patterns
+                       -fwrite-ide-info
+                       -hiedir=.hie
+
+executable hweekly
+  import:              deps
+  hs-source-dirs:      src
+  main-is:             Main.hs
+  build-depends:       optparse-applicative, hspec, QuickCheck
