@@ -29,6 +29,11 @@ tags : [¿¿, ReadingsOfTheWeek, Readings]
 footer :: String
 footer =
   [r|
+
+<div style="text-align: center; border-top: 1px solid #333311; padding-top: 0.7em; margin-top: 0.7em;">
+<a href="http://eepurl.com/geFw7P" class="link f4 grow no-underline br-pill ba ph3 pv2 dib black sans-serif">Subscribe to these posts as a newsletter</a>
+</div>
+
 {{% section-break %}}
 
 <div style="text-align: center; margin-left: -0.5rem;">

@@ -41,14 +41,14 @@ listQuery =
   [r|
   SELECT t.title, t.notes from TMTask t 
   JOIN TMTask p on p.uuid = t.project 
-  WHERE p.title = 'Articles' and t.status=3 and t.trashed != 1
+  WHERE p.title = '📄 Articles' and t.status=3 and t.trashed != 1
 |]
 
 selectTasks :: SQL.Connection -> IO [ListItem]
 selectTasks conn = SQL.query_ conn listQuery
 
 thingsPath :: FilePath
-thingsPath = "/Users/ruben/Library/Group Containers/JLMPQHK86H.com.culturedcode.ThingsMac/Things.sqlite3"
+thingsPath = "/Users/ruben/Library/Group Containers/JLMPQHK86H.com.culturedcode.ThingsMac/Things Database.thingsdatabase/main.sqlite"
 
 tmpPath :: FilePath -> FilePath
 tmpPath dir = dir <> "hThings3.sqlite3"
