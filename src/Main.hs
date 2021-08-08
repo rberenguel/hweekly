@@ -2,6 +2,7 @@
 {-# LANGUAGE QuasiQuotes #-}
 
 import Additional (footer, header)
+import Data.List (sort)
 import qualified Data.Text as T
 import Database.SQLite.Simple as SQL
   ( Connection,
@@ -20,18 +21,27 @@ data ListItem = ListItem
   { title :: T.Text,
     notes :: T.Text
   }
+  deriving (Eq)
 
 mkURL :: T.Text -> T.Text -> T.Text
 mkURL title url = T.concat ["[", title, "]", "(", url, ")"]
 
 instance Show ListItem where
-  show (ListItem t n) = T.unpack . T.concat 
-    $ ["## ", mkURL t url, "\n",  notes, "\n\n"]
+  show (ListItem t n) =
+    T.unpack . T.concat $
+      ["## ", mkURL t url, "\n", notes, "\n\n"]
     where
       (l : ls) = T.lines n
       (url, notes) = case T.lines n of
         (l : ls) | "http" `T.isPrefixOf` l -> (l, T.strip . T.unwords $ ls)
         _ -> ("¿¿¿", n)
+
+instance Ord ListItem where
+  compare l r = case ("above" `T.isInfixOf` notes l, "above" `T.isInfixOf` notes r) of
+    (True, True) -> LT
+    (False, True) -> LT
+    (True, False) -> GT
+    (False, False) -> EQ
 
 instance FromRow ListItem where
   fromRow = ListItem <$> field <*> field
@@ -59,7 +69,7 @@ main = do
   let destinationPath = tmpPath dir
   _ <- copyFile thingsPath destinationPath
   conn <- open destinationPath
-  tasks <- selectTasks conn
+  tasks <- sort <$> selectTasks conn
   let markdown = T.unpack $ T.strip $ T.pack (concat (header : (map show tasks) ++ [footer]))
   let pbcopyCfg =
         setStdin createPipe $
